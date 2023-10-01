@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
 from django.views import generic
@@ -34,7 +35,7 @@ class RedactorListView(generic.ListView):
 
 
 def redactor_newspapers(request: HttpRequest, pk) -> HttpResponse:
-    redactor = Redactor.objects.get(pk=pk)
+    redactor = get_user_model().objects.get(pk=pk)
     newspaper_list = Newspaper.objects.filter(publishers=redactor)
     return render(request,
                   'agency/redactor-newspapers.html',

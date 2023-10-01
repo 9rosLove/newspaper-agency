@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from newspaper_agency import settings
+
 
 class Topic(models.Model):
     name = models.CharField(max_length=255)
@@ -20,8 +22,15 @@ class Newspaper(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
     publication_date = models.DateField()
-    topic = models.ForeignKey(to=Topic, on_delete=models.CASCADE, related_name="newspapers")
-    publishers = models.ManyToManyField(to=Redactor, related_name="newspapers")
+    topic = models.ForeignKey(
+        to=Topic,
+        on_delete=models.CASCADE,
+        related_name="newspapers"
+    )
+    publishers = models.ManyToManyField(
+        to=settings.AUTH_USER_MODEL,
+        related_name="newspapers"
+    )
 
     def __str__(self):
         return self.title
