@@ -1,17 +1,17 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views import generic
 
+from agency.forms import NewspaperForm
 from agency.models import Newspaper, Topic, Redactor
 
 
-def index(request:HttpRequest) -> HttpResponse:
-    newspaper_list = Newspaper.objects.select_related("topic")
-    return render(request,
-                  'agency/index.html',
-                  {'newspaper_list': newspaper_list}
-                  )
+class NewspaperListView(generic.ListView):
+    model = Newspaper
+    template_name = 'agency/index.html'
 
 
 class TopicListView(generic.ListView):
@@ -41,3 +41,17 @@ def redactor_newspapers(request: HttpRequest, pk) -> HttpResponse:
                   'agency/redactor-newspapers.html',
                   {'newspaper_list': newspaper_list}
                   )
+
+
+class NewspaperCreateView(generic.CreateView):
+    model = Newspaper
+    success_url = reverse_lazy('agency:index')
+    form_class = NewspaperForm
+
+
+class NewspaperUpdateView(generic.UpdateView):
+    model = Newspaper
+    success_url = reverse_lazy('agency:index')
+    form_class = NewspaperForm
+
+
