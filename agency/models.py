@@ -21,7 +21,7 @@ class Redactor(AbstractUser):
 class Newspaper(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
-    publication_date = models.DateField(auto_now_add=True)
+    publication_date = models.DateTimeField(auto_now_add=True)
     topic = models.ForeignKey(
         to=Topic,
         on_delete=models.CASCADE,

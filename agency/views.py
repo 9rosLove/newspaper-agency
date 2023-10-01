@@ -43,15 +43,18 @@ def redactor_newspapers(request: HttpRequest, pk) -> HttpResponse:
                   )
 
 
-class NewspaperCreateView(generic.CreateView):
+class NewspaperCreateView(LoginRequiredMixin, generic.CreateView):
     model = Newspaper
     success_url = reverse_lazy('agency:index')
     form_class = NewspaperForm
 
 
-class NewspaperUpdateView(generic.UpdateView):
+class NewspaperUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Newspaper
     success_url = reverse_lazy('agency:index')
     form_class = NewspaperForm
 
 
+class NewspaperDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Newspaper
+    success_url = reverse_lazy('agency:index')
