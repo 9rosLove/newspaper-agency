@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -30,15 +31,14 @@ class NewspaperListView(generic.ListView):
         form = NewspaperSearchForm(self.request.GET)
 
         if form.is_valid():
-            return self.queryset.filter(
-                title__istartswith=form.cleaned_data["title"]
-            )
+            return self.queryset.filter(title__istartswith=form.cleaned_data["title"])
         return self.queryset
 
 
 class TopicListView(generic.ListView):
     model = Topic
     queryset = Topic.objects.all()
+    paginate_by = 6
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(TopicListView, self).get_context_data(**kwargs)
@@ -50,23 +50,31 @@ class TopicListView(generic.ListView):
         form = TopicSearchForm(self.request.GET)
 
         if form.is_valid():
-            return self.queryset.filter(
-                name__istartswith=form.cleaned_data["name"]
-            )
+            return self.queryset.filter(name__istartswith=form.cleaned_data["name"])
         return self.queryset
 
 
 def topic_newspapers(request: HttpRequest, pk) -> HttpResponse:
     newspaper_list = Newspaper.objects.filter(topic_id=pk)
     form = NewspaperSearchForm(request.GET)
-    if form.is_valid():
-        search_query = form.cleaned_data.get("title")
-        if search_query:
-            newspaper_list = newspaper_list.filter(
-                title__icontains=search_query
-            )
-    context = {"newspaper_list": newspaper_list, "search_form": form}
-    return render(request, "agency/topic_newspapers.html", context)
+    search_query = request.GET.get("title")
+    if search_query:
+        newspaper_list = newspaper_list.filter(title__icontains=search_query)
+    page_number = request.GET.get("page")
+    paginator = Paginator(newspaper_list, 10)
+    try:
+        newspaper_list = paginator.page(page_number)
+    except PageNotAnInteger:
+        newspaper_list = paginator.page(1)
+    except EmptyPage:
+        newspaper_list = paginator.page(paginator.num_pages)
+    context = {
+        "newspaper_list": newspaper_list,
+        "page_obj": newspaper_list,
+        "is_paginated": newspaper_list.has_other_pages,
+        "search_form": form,
+    }
+    return render(request, "agency/redactor_newspapers.html", context)
 
 
 class NewspaperDetailView(generic.DetailView):
@@ -76,13 +84,12 @@ class NewspaperDetailView(generic.DetailView):
 class RedactorListView(generic.ListView):
     model = Redactor
     queryset = Redactor.objects.all()
+    paginate_by = 9
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(RedactorListView, self).get_context_data(**kwargs)
         username = self.request.GET.get("username", "")
-        context["search_form"] = RedactorSearchForm(
-            initial={"username": username}
-        )
+        context["search_form"] = RedactorSearchForm(initial={"username": username})
         return context
 
     def get_queryset(self):
@@ -99,13 +106,27 @@ def redactor_newspapers(request: HttpRequest, pk) -> HttpResponse:
     redactor = get_user_model().objects.get(pk=pk)
     newspaper_list = Newspaper.objects.filter(publishers=redactor)
     form = NewspaperSearchForm(request.GET)
-    if form.is_valid():
-        search_query = form.cleaned_data.get("title")
-        if search_query:
-            newspaper_list = newspaper_list.filter(
-                title__icontains=search_query
-            )
-    context = {"newspaper_list": newspaper_list, "search_form": form}
+    search_query = request.GET.get("title")
+
+    if search_query:
+        newspaper_list = newspaper_list.filter(title__icontains=search_query)
+
+    paginator = Paginator(newspaper_list, 10)
+    page_number = request.GET.get("page")
+
+    try:
+        newspaper_list = paginator.page(page_number)
+    except PageNotAnInteger:
+        newspaper_list = paginator.page(1)
+    except EmptyPage:
+        newspaper_list = paginator.page(paginator.num_pages)
+
+    context = {
+        "newspaper_list": newspaper_list,
+        "page_obj": newspaper_list,
+        "is_paginated": newspaper_list.has_other_pages,
+        "search_form": form,
+    }
     return render(request, "agency/redactor_newspapers.html", context)
 
 

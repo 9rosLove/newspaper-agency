@@ -19,7 +19,7 @@ class Redactor(AbstractUser):
         return reverse("agency:redactor-newspapers", kwargs={"pk": self.pk})
 
     def __str__(self):
-        return f"{self.username} ({self.get_full_name()})"
+        return f"{self.get_full_name()}"
 
 
 class Newspaper(models.Model):
@@ -35,11 +35,7 @@ class Newspaper(models.Model):
 
     @property
     def get_short_content(self):
-        return (
-            self.content[:150] + "..."
-            if len(self.content) > 150
-            else self.content
-        )
+        return self.content[:150] + "..." if len(self.content) > 150 else self.content
 
     @property
     def get_short_publishers(self):
