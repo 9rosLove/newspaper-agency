@@ -34,4 +34,7 @@ class TopicAdmin(admin.ModelAdmin):
 @admin.register(Newspaper)
 class NewspaperAdmin(admin.ModelAdmin):
     search_fields = ("title",)
-    list_filter = ("topic", "publishers",)
+    list_filter = (
+        "topic",
+        "publishers",
+    )

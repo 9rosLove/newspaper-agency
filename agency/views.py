@@ -1,18 +1,22 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Q
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
-from agency.forms import NewspaperForm, NewspaperSearchForm, TopicSearchForm, RedactorSearchForm
+from agency.forms import (
+    NewspaperForm,
+    NewspaperSearchForm,
+    TopicSearchForm,
+    RedactorSearchForm,
+)
 from agency.models import Newspaper, Topic, Redactor
 
 
 class NewspaperListView(generic.ListView):
     model = Newspaper
-    template_name = 'agency/index.html'
+    template_name = "agency/index.html"
     paginate_by = 10
     queryset = Newspaper.objects.all()
 
@@ -56,15 +60,13 @@ def topic_newspapers(request: HttpRequest, pk) -> HttpResponse:
     newspaper_list = Newspaper.objects.filter(topic_id=pk)
     form = NewspaperSearchForm(request.GET)
     if form.is_valid():
-        search_query = form.cleaned_data.get('title')
+        search_query = form.cleaned_data.get("title")
         if search_query:
-            newspaper_list = newspaper_list.filter(title__icontains=search_query)
-    context = {'newspaper_list': newspaper_list, 'search_form': form}
-    return render(
-        request,
-        'agency/topic-newspapers.html',
-        context
-    )
+            newspaper_list = newspaper_list.filter(
+                title__icontains=search_query
+            )
+    context = {"newspaper_list": newspaper_list, "search_form": form}
+    return render(request, "agency/topic_newspapers.html", context)
 
 
 class NewspaperDetailView(generic.DetailView):
@@ -78,7 +80,9 @@ class RedactorListView(generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(RedactorListView, self).get_context_data(**kwargs)
         username = self.request.GET.get("username", "")
-        context["search_form"] = RedactorSearchForm(initial={"username": username})
+        context["search_form"] = RedactorSearchForm(
+            initial={"username": username}
+        )
         return context
 
     def get_queryset(self):
@@ -96,29 +100,27 @@ def redactor_newspapers(request: HttpRequest, pk) -> HttpResponse:
     newspaper_list = Newspaper.objects.filter(publishers=redactor)
     form = NewspaperSearchForm(request.GET)
     if form.is_valid():
-        search_query = form.cleaned_data.get('title')
+        search_query = form.cleaned_data.get("title")
         if search_query:
-            newspaper_list = newspaper_list.filter(title__icontains=search_query)
-    context = {'newspaper_list': newspaper_list, 'search_form': form}
-    return render(
-        request,
-        'agency/redactor-newspapers.html',
-        context
-    )
+            newspaper_list = newspaper_list.filter(
+                title__icontains=search_query
+            )
+    context = {"newspaper_list": newspaper_list, "search_form": form}
+    return render(request, "agency/redactor_newspapers.html", context)
 
 
 class NewspaperCreateView(LoginRequiredMixin, generic.CreateView):
     model = Newspaper
-    success_url = reverse_lazy('agency:index')
+    success_url = reverse_lazy("agency:index")
     form_class = NewspaperForm
 
 
 class NewspaperUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Newspaper
-    success_url = reverse_lazy('agency:index')
+    success_url = reverse_lazy("agency:index")
     form_class = NewspaperForm
 
 
 class NewspaperDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Newspaper
-    success_url = reverse_lazy('agency:index')
+    success_url = reverse_lazy("agency:index")
