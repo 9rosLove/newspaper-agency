@@ -14,7 +14,7 @@ from agency.views import (
     NewspaperDeleteView,
     register,
     RedactorUpdateView,
-    TopicCreateView,
+    TopicCreateView, RedactorDeleteView,
 )
 
 
@@ -23,14 +23,24 @@ urlpatterns = [
     path("", NewspaperListView.as_view(), name="index"),
     path("topics/", TopicListView.as_view(), name="topic-list"),
     path("topics/<int:pk>/", topic_newspapers, name="topic-newspapers"),
-    path(
-        "newspaper/<int:pk>/",
-        NewspaperDetailView.as_view(),
-        name="newspaper-detail",
-    ),
     path("redactors/", RedactorListView.as_view(), name="redactor-list"),
     path(
         "redactors/<int:pk>/", redactor_newspapers, name="redactor-newspapers"
+    ),
+    path(
+        "redactors/<int:pk>/update/",
+        RedactorUpdateView.as_view(),
+        name="redactor-update",
+    ),
+    path(
+      "redactors/<int:pk>/delete/",
+      RedactorDeleteView.as_view(),
+      name="redactor-delete",
+    ),
+    path(
+      "newspaper/<int:pk>/",
+      NewspaperDetailView.as_view(),
+      name="newspaper-detail",
     ),
     path(
         "newspaper/create/",
@@ -46,16 +56,6 @@ urlpatterns = [
         "newspaper/<int:pk>/delete/",
         NewspaperDeleteView.as_view(),
         name="newspaper-delete",
-    ),
-    path(
-        "redactors/<int:pk>/update/",
-        RedactorUpdateView.as_view(),
-        name="redactor-update",
-    ),
-    path(
-        "redactors/<int:pk>/delete/",
-        RedactorUpdateView.as_view(),
-        name="redactor-delete",
     ),
     path("topics/create/", TopicCreateView.as_view(), name="topic-create"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

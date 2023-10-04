@@ -209,3 +209,10 @@ class TopicCreateView(LoginRequiredMixin, generic.CreateView):
     model = Topic
     fields = "__all__"
     success_url = reverse_lazy("agency:index")
+
+
+class RedactorDeleteView(
+    LoginRequiredMixin, RedactorAccessMixin, generic.DeleteView
+):
+    model = Redactor
+    success_url = reverse_lazy("agency:index")

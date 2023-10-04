@@ -55,6 +55,13 @@ class Newspaper(models.Model):
             short_list += "..."
         return short_list
 
+    @property
+    def get_full_publishers(self):
+        return ", ".join(
+            f"<a href='{publisher.get_absolute_url()}'>{publisher}</a>"
+            for publisher in self.publishers.all()
+        )
+
     def __str__(self):
         return self.title
 
