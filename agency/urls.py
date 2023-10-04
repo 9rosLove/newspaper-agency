@@ -12,10 +12,14 @@ from agency.views import (
     NewspaperCreateView,
     NewspaperUpdateView,
     NewspaperDeleteView,
+    register,
+    RedactorUpdateView,
+    TopicCreateView,
 )
 
 
 urlpatterns = [
+    path("registration/", register, name="register"),
     path("", NewspaperListView.as_view(), name="index"),
     path("topics/", TopicListView.as_view(), name="topic-list"),
     path("topics/<int:pk>/", topic_newspapers, name="topic-newspapers"),
@@ -43,6 +47,17 @@ urlpatterns = [
         NewspaperDeleteView.as_view(),
         name="newspaper-delete",
     ),
+    path(
+        "redactors/<int:pk>/update/",
+        RedactorUpdateView.as_view(),
+        name="redactor-update",
+    ),
+    path(
+        "redactors/<int:pk>/delete/",
+        RedactorUpdateView.as_view(),
+        name="redactor-delete",
+    ),
+    path("topics/create/", TopicCreateView.as_view(), name="topic-create"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 app_name = "agency"

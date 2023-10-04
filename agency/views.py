@@ -1,7 +1,8 @@
+from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse, HttpRequest
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -10,8 +11,44 @@ from agency.forms import (
     NewspaperSearchForm,
     TopicSearchForm,
     RedactorSearchForm,
+    RedactorRegistrationForm,
+    RedactorForm,
 )
 from agency.models import Newspaper, Topic, Redactor
+
+
+def register(request):  # FIX
+    if request.method == "POST":
+        registration_form = RedactorRegistrationForm(
+            request.POST, request.FILES
+        )
+        if registration_form.is_valid():
+            user = registration_form.save()
+            login(request, user)
+            return redirect("/")  # FIX
+    else:
+        if request.user.is_authenticated:
+            return redirect("/")
+        registration_form = RedactorRegistrationForm()
+    return render(
+        request, "registration/register.html", {"form": registration_form}
+    )  # FIX
+
+
+class NewspaperAccessMixin(generic.detail.BaseDetailView):
+    def get(self, request, *args, **kwargs):
+        newspaper = self.get_object()
+        if request.user not in newspaper.publishers.all():
+            return redirect("agency:index")
+        return super().get(request, *args, **kwargs)
+
+
+class RedactorAccessMixin(generic.detail.BaseDetailView):
+    def get(self, request, *args, **kwargs):
+        user = self.get_object()
+        if request.user != user:
+            return redirect("agency:index")
+        return super().get(request, *args, **kwargs)
 
 
 class NewspaperListView(generic.ListView):
@@ -79,7 +116,7 @@ def topic_newspapers(request: HttpRequest, pk) -> HttpResponse:
         "search_form": form,
         "topic": topic,
     }
-    return render(request, "agency/redactor_newspapers.html", context)
+    return render(request, "agency/topic_newspapers.html", context)
 
 
 class NewspaperDetailView(generic.DetailView):
@@ -145,12 +182,30 @@ class NewspaperCreateView(LoginRequiredMixin, generic.CreateView):
     form_class = NewspaperForm
 
 
-class NewspaperUpdateView(LoginRequiredMixin, generic.UpdateView):
+class NewspaperUpdateView(
+    LoginRequiredMixin, NewspaperAccessMixin, generic.UpdateView
+):
     model = Newspaper
     success_url = reverse_lazy("agency:index")
     form_class = NewspaperForm
 
 
-class NewspaperDeleteView(LoginRequiredMixin, generic.DeleteView):
+class NewspaperDeleteView(
+    LoginRequiredMixin, NewspaperAccessMixin, generic.DeleteView
+):
     model = Newspaper
+    success_url = reverse_lazy("agency:index")
+
+
+class RedactorUpdateView(
+    LoginRequiredMixin, RedactorAccessMixin, generic.UpdateView
+):
+    model = Redactor
+    success_url = reverse_lazy("agency:index")
+    form_class = RedactorForm
+
+
+class TopicCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Topic
+    fields = "__all__"
     success_url = reverse_lazy("agency:index")
