@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path
 
 from agency.views import (
@@ -23,7 +25,9 @@ urlpatterns = [
         name="newspaper-detail",
     ),
     path("redactors/", RedactorListView.as_view(), name="redactor-list"),
-    path("redactors/<int:pk>/", redactor_newspapers, name="redactor-newspapers"),
+    path(
+        "redactors/<int:pk>/", redactor_newspapers, name="redactor-newspapers"
+    ),
     path(
         "newspaper/create/",
         NewspaperCreateView.as_view(),
@@ -39,6 +43,6 @@ urlpatterns = [
         NewspaperDeleteView.as_view(),
         name="newspaper-delete",
     ),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 app_name = "agency"
