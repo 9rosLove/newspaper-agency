@@ -14,7 +14,8 @@ from agency.views import (
     NewspaperDeleteView,
     register,
     RedactorUpdateView,
-    TopicCreateView, RedactorDeleteView,
+    TopicCreateView,
+    RedactorDeleteView,
 )
 
 
@@ -33,14 +34,14 @@ urlpatterns = [
         name="redactor-update",
     ),
     path(
-      "redactors/<int:pk>/delete/",
-      RedactorDeleteView.as_view(),
-      name="redactor-delete",
+        "redactors/<int:pk>/delete/",
+        RedactorDeleteView.as_view(),
+        name="redactor-delete",
     ),
     path(
-      "newspaper/<int:pk>/",
-      NewspaperDetailView.as_view(),
-      name="newspaper-detail",
+        "newspaper/<int:pk>/",
+        NewspaperDetailView.as_view(),
+        name="newspaper-detail",
     ),
     path(
         "newspaper/create/",

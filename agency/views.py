@@ -35,7 +35,7 @@ def register(request):  # FIX
     )  # FIX
 
 
-class NewspaperAccessMixin():
+class NewspaperAccessMixin:
     def get(self, request, *args, **kwargs):
         newspaper = self.get_object()
         if request.user not in newspaper.publishers.all():
@@ -49,7 +49,7 @@ class NewspaperAccessMixin():
         return super().post(request, *args, **kwargs)
 
 
-class RedactorAccessMixin():
+class RedactorAccessMixin:
     def get(self, request, *args, **kwargs):
         user = self.get_object()
         if request.user != user:
@@ -223,8 +223,6 @@ class TopicCreateView(LoginRequiredMixin, generic.CreateView):
     success_url = reverse_lazy("agency:index")
 
 
-class RedactorDeleteView(
-    LoginRequiredMixin, generic.DeleteView
-):
+class RedactorDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Redactor
     success_url = reverse_lazy("agency:index")
