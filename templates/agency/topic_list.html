@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+    {% include "includes/search_line.html" %}
+    <div class="container">
+        <div class="heading text-center">
+            <h2>Topics</h2>
+            <i><a href="{% url "agency:topic-create" %}" style="color: #000000; padding-left: 1200px">Create</a></i>
+        </div>
+        <br>
+        {% if topic_list %}
+        <div class="row">
+            {% for topic in topic_list %}
+            <div class="col-4 py-3 mx-auto col-xl-4 col-lg-6 col-md-6 col-sm-10" style="min-width: 280px; min-height: 280px;">
+                <div class="card" style="width: 100%; height: 100%;">
+                    <a href="{% url "agency:topic-newspapers" pk=topic.id %}">
+                        <img class="img-fluid card-img-top" style="height: 250px; object-fit: cover"
+                             {% if topic.image %}
+                             src="{{ topic.image.url }}"
+                             {% else %}
+                             src="https://www.poynter.org/wp-content/themes/elumine/assets/images/default-img.jpg"
+                             {% endif %}
+                        />
+                    </a>
+                    <div class="card-body">
+                        <h5>{{ topic.name}}</h5>
+                        <p>Articles: {{ topic.newspapers.count }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-8 col-xl-6 text-center mx-auto">
+                <p class="fw-bold">No topics</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}
