@@ -133,7 +133,9 @@ def topic_newspapers(request: HttpRequest, pk) -> HttpResponse:
 
 class NewspaperDetailView(generic.DetailView):
     model = Newspaper
-    queryset = Newspaper.objects.prefetch_related("publishers").select_related("topic")
+    queryset = Newspaper.objects.prefetch_related("publishers").select_related(
+        "topic"
+    )
 
 
 class RedactorListView(generic.ListView):
@@ -161,7 +163,9 @@ class RedactorListView(generic.ListView):
 
 def redactor_newspapers(request: HttpRequest, pk) -> HttpResponse:
     redactor = get_object_or_404(Redactor, pk=pk)
-    newspaper_list = Newspaper.objects.filter(publishers=redactor).prefetch_related("publishers")
+    newspaper_list = Newspaper.objects.filter(
+        publishers=redactor
+    ).prefetch_related("publishers")
     form = NewspaperSearchForm(request.GET)
     search_query = request.GET.get("title")
 

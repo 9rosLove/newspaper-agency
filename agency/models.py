@@ -41,9 +41,7 @@ class Newspaper(models.Model):
     def get_short_content(self):
         short_content = re.sub(r"<[^>]*>", "", self.content)[:150]
         return (
-            short_content + "..."
-            if len(self.content) > 150
-            else self.content
+            short_content + "..." if len(self.content) > 150 else self.content
         )
 
     @property
