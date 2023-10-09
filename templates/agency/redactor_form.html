@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-lg-8 mx-auto">
+      <h1 class="mt-5 mb-4 text-center">Update redactor</h1>
+      <br>
+      <form action="" method="post" novalidate enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div class="mt-5 pb-5">
+          <div class="row">
+            <div class="col">
+              <button type="button" onclick="history.back()" class="btn btn-secondary" style="margin-right: 350px">Cancel</button>
+            </div>
+            <div class="col">
+              <button type="submit" class="btn btn-primary" style="margin-left: 200px">Submit</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
