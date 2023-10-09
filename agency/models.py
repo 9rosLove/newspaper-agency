@@ -3,6 +3,7 @@ from django.db import models
 from django.urls import reverse
 
 from newspaper_agency import settings
+import re
 
 
 class Topic(models.Model):
@@ -38,8 +39,9 @@ class Newspaper(models.Model):
 
     @property
     def get_short_content(self):
+        short_content = re.sub(r"<[^>]*>", "", self.content)[:150]
         return (
-            self.content[:150] + "..."
+            short_content + "..."
             if len(self.content) > 150
             else self.content
         )

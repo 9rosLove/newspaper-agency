@@ -13,7 +13,7 @@
                     <div class="post-preview">
                         <a href="/newspaper/{{ newspaper.id }}">
                             <h2 class="post-title">{{ newspaper.title }}</h2>
-                            <h3 class="post-subtitle">{{ newspaper.get_short_content }}</h3>
+                            <h3 class="post-subtitle">{{ newspaper.get_short_content|striptags }}</h3>
                         </a>
                         <p class="post-meta">
                             Posted by

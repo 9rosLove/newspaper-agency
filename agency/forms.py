@@ -4,6 +4,7 @@ from crispy_forms.layout import Layout
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
+from django_summernote.widgets import SummernoteWidget
 
 from agency.models import Newspaper, Redactor
 
@@ -46,6 +47,7 @@ class RedactorForm(UserCreationForm):
 
 
 class NewspaperForm(forms.ModelForm):
+    content = forms.CharField(widget=SummernoteWidget)
     publishers = forms.ModelMultipleChoiceField(
         queryset=get_user_model().objects.all(),
         widget=forms.CheckboxSelectMultiple,
