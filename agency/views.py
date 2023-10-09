@@ -17,7 +17,7 @@ from agency.forms import (
 from agency.models import Newspaper, Topic, Redactor
 
 
-def register(request):  # FIX
+def register(request):
     if request.method == "POST":
         registration_form = RedactorRegistrationForm(
             request.POST, request.FILES
@@ -25,14 +25,14 @@ def register(request):  # FIX
         if registration_form.is_valid():
             user = registration_form.save()
             login(request, user)
-            return redirect("/")  # FIX
+            return redirect("/")
     else:
         if request.user.is_authenticated:
             return redirect("/")
         registration_form = RedactorRegistrationForm()
     return render(
         request, "registration/register.html", {"form": registration_form}
-    )  # FIX
+    )
 
 
 class NewspaperAccessMixin:
@@ -67,7 +67,7 @@ class NewspaperListView(generic.ListView):
     model = Newspaper
     template_name = "agency/index.html"
     paginate_by = 6
-    queryset = Newspaper.objects.all()
+    queryset = Newspaper.objects.prefetch_related("publishers")
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(NewspaperListView, self).get_context_data(**kwargs)
@@ -133,6 +133,7 @@ def topic_newspapers(request: HttpRequest, pk) -> HttpResponse:
 
 class NewspaperDetailView(generic.DetailView):
     model = Newspaper
+    queryset = Newspaper.objects.prefetch_related("publishers").select_related("topic")
 
 
 class RedactorListView(generic.ListView):
@@ -160,7 +161,7 @@ class RedactorListView(generic.ListView):
 
 def redactor_newspapers(request: HttpRequest, pk) -> HttpResponse:
     redactor = get_object_or_404(Redactor, pk=pk)
-    newspaper_list = Newspaper.objects.filter(publishers=redactor)
+    newspaper_list = Newspaper.objects.filter(publishers=redactor).prefetch_related("publishers")
     form = NewspaperSearchForm(request.GET)
     search_query = request.GET.get("title")
 

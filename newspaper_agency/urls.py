@@ -24,6 +24,7 @@ urlpatterns = [
     path("", include("agency.urls", namespace="agency")),
     path("accounts/", include("django.contrib.auth.urls")),
     path("summernote/", include("django_summernote.urls")),
+    path("__debug__/", include("debug_toolbar.urls")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
