@@ -35,20 +35,32 @@ def register(request):  # FIX
     )  # FIX
 
 
-class NewspaperAccessMixin(generic.detail.BaseDetailView):
+class NewspaperAccessMixin():
     def get(self, request, *args, **kwargs):
         newspaper = self.get_object()
         if request.user not in newspaper.publishers.all():
             return redirect("agency:index")
         return super().get(request, *args, **kwargs)
 
+    def post(self, request, *args, **kwargs):
+        newspaper = self.get_object()
+        if request.user not in newspaper.publishers.all():
+            return redirect("agency:index")
+        return super().post(request, *args, **kwargs)
 
-class RedactorAccessMixin(generic.detail.BaseDetailView):
+
+class RedactorAccessMixin():
     def get(self, request, *args, **kwargs):
         user = self.get_object()
         if request.user != user:
             return redirect("agency:index")
         return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        user = self.get_object()
+        if request.user != user:
+            return redirect("agency:index")
+        return super().post(request, *args, **kwargs)
 
 
 class NewspaperListView(generic.ListView):
@@ -212,7 +224,7 @@ class TopicCreateView(LoginRequiredMixin, generic.CreateView):
 
 
 class RedactorDeleteView(
-    LoginRequiredMixin, RedactorAccessMixin, generic.DeleteView
+    LoginRequiredMixin, generic.DeleteView
 ):
     model = Redactor
     success_url = reverse_lazy("agency:index")
