@@ -20,6 +20,7 @@
                             {{ newspaper.get_short_publishers | safe}}
                           on {{ newspaper.publication_date}}
                         </p>
+                      <p>Topic: <a href="{{ newspaper.topic.get_absolute_url }}" style="text-decoration: none">{{ newspaper.topic }}</a></p>
                     </div>
                     <hr class="my-4" />
                   {% endfor %}
