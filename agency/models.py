@@ -10,6 +10,9 @@ class Topic(models.Model):
     name = models.CharField(max_length=255)
     image = models.ImageField(upload_to="topics/", null=True, blank=True)
 
+    def get_absolute_url(self):
+        return reverse("agency:topic-newspapers", kwargs={"pk": self.pk})
+
     def __str__(self):
         return self.name
 
