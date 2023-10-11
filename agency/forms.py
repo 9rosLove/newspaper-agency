@@ -46,6 +46,17 @@ class RedactorForm(UserCreationForm):
         ]
 
 
+class RedactorUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Redactor
+        fields = [
+            "first_name",
+            "last_name",
+            "years_of_experience",
+            "avatar",
+        ]
+
+
 class NewspaperForm(forms.ModelForm):
     content = forms.CharField(widget=SummernoteWidget)
     publishers = forms.ModelMultipleChoiceField(

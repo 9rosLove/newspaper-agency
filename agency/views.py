@@ -13,7 +13,7 @@ from agency.forms import (
     TopicSearchForm,
     RedactorSearchForm,
     RedactorRegistrationForm,
-    RedactorForm,
+    RedactorForm, RedactorUpdateForm,
 )
 from agency.models import Newspaper, Topic, Redactor
 
@@ -225,7 +225,7 @@ class RedactorUpdateView(
 ):
     model = Redactor
     success_url = reverse_lazy("agency:index")
-    form_class = RedactorForm
+    form_class = RedactorUpdateForm
 
 
 class TopicCreateView(LoginRequiredMixin, generic.CreateView):
