@@ -17,6 +17,10 @@
                     <span class="subheading">
                         Experience: {{ redactor.years_of_experience }} year{{ redactor.years_of_experience|pluralize }}
                         <br><br>Articles published: {{ redactor.newspapers.count }}
+                      {% if topic %}
+                      <br><br>
+                      Favourite topic: {{ topic }}
+                      {% endif %}
                     </span>
                 </div>
             </div>

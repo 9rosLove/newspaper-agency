@@ -1,6 +1,7 @@
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Count
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -133,9 +134,7 @@ def topic_newspapers(request: HttpRequest, pk) -> HttpResponse:
 
 class NewspaperDetailView(generic.DetailView):
     model = Newspaper
-    queryset = Newspaper.objects.prefetch_related("publishers").select_related(
-        "topic"
-    )
+    queryset = Newspaper.objects.select_related("topic").prefetch_related("publishers")
 
 
 class RedactorListView(generic.ListView):
@@ -165,7 +164,13 @@ def redactor_newspapers(request: HttpRequest, pk) -> HttpResponse:
     redactor = get_object_or_404(Redactor, pk=pk)
     newspaper_list = Newspaper.objects.filter(
         publishers=redactor
-    ).prefetch_related("publishers")
+    ).select_related("topic").prefetch_related("publishers")
+    topic_obj = newspaper_list.values("topic").annotate(Count("topic")).order_by("-topic__count").first()
+    if topic_obj:
+        topic_pk = topic_obj["topic"]
+        topic = Topic.objects.get(pk=topic_pk)
+    else:
+        topic = None
     form = NewspaperSearchForm(request.GET)
     search_query = request.GET.get("title")
 
@@ -189,6 +194,7 @@ def redactor_newspapers(request: HttpRequest, pk) -> HttpResponse:
         "search_form": form,
         "redactor": redactor,
         "page_number": page_number,
+        "topic": topic
     }
     return render(request, "agency/redactor_newspapers.html", context)
 

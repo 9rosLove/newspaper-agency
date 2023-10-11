@@ -4,7 +4,7 @@
 
 
 <div class="login-container">
-  <h1>Sign up</h1>
+  <h1 style="text-align: center">Sign up</h1>
   <br>
   {% if next %}
     <p>Please log in to see this page.</p>
@@ -13,18 +13,10 @@
   <form method="post" novalidate>
     {% csrf_token %}
     {{ form|crispy }}
-
-    <input type="submit" value="Sign up" class="btn btn-primary" />
+    <div style="text-align: center">
+    <input type="submit" value="Sign up" class="btn btn-primary" style="width: 50%"/>
+    </div>
   </form>
 </div>
-
-<style>
-  .login-container {
-    text-align: center;
-    margin: 0 auto;
-    max-width: 400px;
-    padding: 20px;
-  }
-</style>
 
 {% endblock %}

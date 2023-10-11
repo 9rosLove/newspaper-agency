@@ -50,7 +50,7 @@ class NewspaperForm(forms.ModelForm):
     content = forms.CharField(widget=SummernoteWidget)
     publishers = forms.ModelMultipleChoiceField(
         queryset=get_user_model().objects.all(),
-        widget=forms.CheckboxSelectMultiple,
+        widget=forms.CheckboxSelectMultiple
     )
 
     class Meta:
