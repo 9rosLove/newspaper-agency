@@ -18,7 +18,7 @@
           {% include "includes/navbar.html" %}
         {% endblock %}
         {% block header %}
-        <header class="masthead" style="height: 450px; background-image: url('https://newspaperagency.s3.eu-north-1.amazonaws.com/staticfiles/assets/img/home-bg.png')">
+        <header class="masthead" style="height: 450px; background-image: url('{% static 'assets/img/home-bg.png' %}')">
             <div class="container position-relative px-4 px-lg-5">
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7">
