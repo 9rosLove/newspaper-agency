@@ -32,6 +32,7 @@ DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
+    "https://newspaper-agency-d7xu.onrender.com"
 ]
 
 # Application definition
