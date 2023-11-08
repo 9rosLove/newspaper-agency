@@ -15,7 +15,7 @@
                     <a href="{% url "agency:topic-newspapers" pk=topic.id %}">
                         <img class="img-fluid card-img-top" style="height: 250px; object-fit: cover"
                              {% if topic.image %}
-                             src="{{ topic.image.url }}"
+                             src="{{ topic.image.url}}"
                              {% else %}
                              src="https://www.poynter.org/wp-content/themes/elumine/assets/images/default-img.jpg"
                              {% endif %}
