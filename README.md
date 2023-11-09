@@ -46,3 +46,6 @@ Django project for managing newspapers and redactors.
 
 ## 🖼️ Demo
 ![Demo](demo.png)
+
+## 📊 Database Schema
+![DB Schema](db_schema.jpg)
