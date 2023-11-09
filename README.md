@@ -1,13 +1,21 @@
 # 📰 Newspaper Agency
 Django project for managing newspapers and redactors.
 
+## Check it out!
+[Deployed to Render](https://newspaper-agency-d7xu.onrender.com/)
+- Test user   
+   ```
+   login: username
+   password: dpPRyWmZ4Y
+   ```
+
 ## 🛠️ Installation
 
 1. Clone the repository:
-    ```bash
-    git clone https://github.com/9rosLove/newspaper-agency.git
-    cd newspaper-agency
-    ```
+   ```bash
+   git clone https://github.com/9rosLove/newspaper-agency.git
+   cd newspaper-agency
+   ```
 2. Set up a virtual environment and activate it:
      - For Windows 🪟:
    
