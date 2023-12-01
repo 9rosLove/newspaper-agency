@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block header %}
+<header class="masthead" style="height: 450px; background-image: url('{% if topic.image %}{{ topic.image.url }}{% else %}/static/assets/img/default-bg.jpg{% endif %}')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <h1 style="font-size: 50px">{{ topic.name }}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+{% endblock %}
+
+{% block content %}
+    {% include "includes/search_line.html" %}
+    {% include "includes/newspapers.html" %}
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% include "includes/search_line.html" %}
+    <div class="container py-5">
+        <div class="row mb-4 mb-lg-5">
+            <div class="col-md-8 col-xl-6 text-center mx-auto">
+                <h2 class="fw-bold">Our Redactors</h2>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row text-center">
+                {% if redactor_list %}
+                    {% for redactor in redactor_list %}
+                        <div class="col-xl-3 col-sm-6 mb-5">
+                            <a href="{% url 'agency:redactor-newspapers' pk=redactor.id %}">
+                                <div class="bg-white rounded shadow-sm py-5 px-4">
+                                    <img class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm"
+                                         {% if redactor.avatar %}
+                                             src="{{ redactor.avatar.url }}" alt="{{ redactor.get_full_name }}"
+                                         {% else %}
+                                             src="https://st3.depositphotos.com/13159112/17145/v/450/depositphotos_171453724-stock-illustration-default-avatar-profile-icon-grey.jpg"
+                                         {% endif %}
+                                         alt="{{ redactor.get_full_name }}" width="100">
+                                    <h5 class="mb-0">{{ redactor.get_full_name }}</h5>
+                                    <span class="small text-muted">Experience: {{ redactor.years_of_experience }} year{{ redactor.years_of_experience|pluralize }}</span>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-md-8 col-xl-6 text-center mx-auto">
+                        <p class="fw-bold">No redactors</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      {% load static %}
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Kyiv Chronicle</title>
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css" />
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    </head>
+    <body>
+        {% block navbar %}
+          {% include "includes/navbar.html" %}
+        {% endblock %}
+        {% block header %}
+        <header class="masthead" style="height: 450px; background-image: url('{% static 'assets/img/home-bg.png' %}')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="site-heading">
+                            <h1>Kyiv Chronicle</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        {% endblock %}
+        {% block content %}
+        {% endblock %}
+        {% include "includes/pagination.html" %}
+        {% block footer %}
+          {% include "includes/footer.html" %}
+    {% endblock footer %}
+    </body>
+</html>

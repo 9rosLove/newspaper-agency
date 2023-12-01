@@ -1,0 +1,36 @@
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+              <div class="col-md-8 col-xl-6 text-center mx-auto">
+                {% if page_obj.has_previous %}
+              <h2 class="fw-bold">Articles</h2>
+                {% else %}
+                  <h2 class="fw-bold">Last Articles</h2>
+                {% endif %}
+              </div>
+     <div class="col-md-10 col-lg-8 col-xl-7">
+                {% if newspaper_list %}
+                  {% for newspaper in newspaper_list %}
+                    <div class="post-preview">
+                        <a href="/newspaper/{{ newspaper.id }}">
+                            <h2 class="post-title">{{ newspaper.title }}</h2>
+                            <h3 class="post-subtitle">{{ newspaper.get_short_content | striptags }}</h3>
+                        </a>
+                        <p class="post-meta">
+                            Posted by
+                            {{ newspaper.get_short_publishers | safe}}
+                          on {{ newspaper.publication_date}}
+                        </p>
+                      <p>Topic: <a href="{{ newspaper.topic.get_absolute_url }}" style="text-decoration: none">{{ newspaper.topic }}</a></p>
+                    </div>
+                    <hr class="my-4" />
+                  {% endfor %}
+                {% else %}
+                  <div class="row gx-4 gx-lg-5 justify-content-center">
+              <div class="col-md-8 col-xl-6 text-center mx-auto">
+              <p class="fw-bold"> No artiles</p>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+            </div>
+            </div>

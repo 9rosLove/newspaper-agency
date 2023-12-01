@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-6 text-center">
+      <h2>Are you sure that you want to delete "{{ newspaper }}"</h2>
+      <form action="" method="post">
+                {% csrf_token %}
+        <div style="margin-top: 100px; padding-bottom: 150px;">
+    <div class="col mt-5">
+              <button type="button" onclick="history.back()" class="btn btn-secondary" style="float: left; min-width: 150px; ">Cancel</button>
+            </div>
+            <div class="col">
+              <button type="submit" class="btn btn-danger" style="float: right; min-width: 150px; margin-left: 150px;">Confirm</button>
+            </div>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

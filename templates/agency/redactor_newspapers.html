@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+{% block header %}
+<header class="masthead" style="height: 450px; background-image: url('{% static 'assets/img/default-bg.jpg' %}')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    {% if user.id == redactor.id %}
+                        <span class="meta" style="float: right">
+                            <a href="{% url "agency:redactor-update" pk=redactor.id %}" style="color: #ffffffff">Edit</a>
+                            <br><br>
+                            <a href="{% url "agency:redactor-delete" pk=redactor.id %}" style="color: #ffffffff">Delete</a>
+                        </span>
+                    {% endif %}
+                    <h1 style="font-size: 50px">{{ redactor }}</h1>
+                    <span class="subheading">
+                        Experience: {{ redactor.years_of_experience }} year{{ redactor.years_of_experience|pluralize }}
+                        <br><br>Articles published: {{ redactor.newspapers.count }}
+                      {% if topic %}
+                      <br><br>
+                      Favourite topic: {{ topic }}
+                      {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+{% endblock %}
+
+{% block content %}
+    {% include "includes/search_line.html" %}
+    {% include "includes/newspapers.html" %}
+{% endblock %}
